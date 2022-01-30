@@ -1,20 +1,20 @@
 const APP_ID = '9a50aed5dc584f3bb27c5bd40e4a69ce'
-const TOKEN = "0069a50aed5dc584f3bb27c5bd40e4a69ceIACLV1VEetMEGam1TN3yrs0Coaso23lpRI//O169cxXCH2TNKL8AAAAAEADbqsx0z9b2YQEAAQDO1vZh"
-const CHANNEL = "main"
-
+const TOKEN = "0069a50aed5dc584f3bb27c5bd40e4a69ceIACbW48XfgzTmbyBzGkLGjcwZfoQ5svDIAEpqLY3qepm2tLR1sRz0DayIgALh/ECXPv3YQQAAQBc+/dhAgBc+/dhAwBc+/dhBABc+/dh"
+const CHANNEL = "mainchannel"
+let UID = 51
 const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" })
 
 let localTracks = []
 let remoteUsers = {}
 
-let UID;
+
 
 let joinAndDisplayLocalStream = async () => {
 
     client.on('user-published', handleUserJoined)
     client.on('user-left', handleUserLeft)
 
-    UID = await client.join(APP_ID, CHANNEL, TOKEN, null)
+    await client.join(APP_ID, CHANNEL, TOKEN, UID)
 
     localTracks = await AgoraRTC.createMicrophoneAndCameraTracks()
 

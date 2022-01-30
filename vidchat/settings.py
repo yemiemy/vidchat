@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'base'
 ]
 
+APP_ID = '9a50aed5dc584f3bb27c5bd40e4a69ce'
+APP_CERTIFICATE = 'c01765fd220246b889b97e371d2b71ad'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
