@@ -11,15 +11,38 @@
 
         <form id="form">
             <div class="form-field">
-                <input type="text" name="room" placeholder="ENTER A ROOM NAME..." style="text-transform: capitalize;" />
+                <input type="text" name="room" placeholder="ENTER A ROOM CODE..." minlength="9" required style="text-transform: uppercase;" />
             </div>
             <div class="form-field">
-                <input type="text" name="username" placeholder="ENTER YOUR NAME..." style="text-transform: capitalize;" />
+                <input type="text" name="username" placeholder="ENTER YOUR NAME..." required style="text-transform: uppercase;" />
             </div>
             <div class="form-field">
                 <input type="submit" value="Join Stream" />
             </div>
+            <div class="form-field">
+                <input type="button" id="createMeeting" value="New Meeting" />
+            </div>
         </form>
+        <!-- Trigger/Open The Modal -->
+        <button id="myBtn" style="display: none;">Open Modal</button>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form>
+                    <div class="form-field">
+                        <textarea id="meetingCode" style="text-transform: uppercase;"></textarea>
+                    </div>
+                    <div class="form-field">
+                        <input type="button" onclick="copyFunction()" value="Copy Code" />
+                    </div>
+                </form>
+            </div>
+
+        </div>
     </section>
     
 </main>
@@ -34,18 +57,84 @@
         let response = await fetch(`/get-token/?channel=${room}`)
         let data = await response.json()
 
-        let UID = data.uid
-        let token = data.token
+        if (data.message){
+            console.log(data.message)
+            alert(data.message)
+        }
+        else{
+            let UID = data.uid
+            let token = data.token
 
-        sessionStorage.setItem('UID',UID)
-        sessionStorage.setItem('token',token)
-        sessionStorage.setItem('room',room)
-        sessionStorage.setItem('username',username)
+            sessionStorage.setItem('UID',UID)
+            sessionStorage.setItem('token',token)
+            sessionStorage.setItem('room',room)
+            sessionStorage.setItem('username',username)
 
-        window.open('/room/', '_self')
+            window.open('/room/', '_self')
+        }
     }
 
     form.addEventListener('submit', handleSubmit)
+
+    // Create Meeting
+    let createMeeting = async (e) => {
+        e.preventDefault()
+        let response = await fetch(`/create-meeting/`)
+        let data = await response.json()
+        
+        // put the created room name in the modal content
+        let code = document.getElementById("meetingCode");
+        code.innerText = data.room_name
+        
+        // click the open modal button
+        let btn = document.getElementById("myBtn");
+        btn.click();
+
+    }
+    document.getElementById('createMeeting').addEventListener('click', createMeeting)
 </script>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    
+    let btn = document.getElementById("myBtn");
+    // demo the user clicks the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    function copyFunction() {
+        /* Get the text field */
+        var copyText = document.getElementById("meetingCode");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(copyText.value);
+
+        /* Alert the copied text */
+        alert("Copied the code: " + copyText.value);
+    }
+
+    </script>
+    
 
 {% endblock content %} 

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
 APP_ID = '9a50aed5dc584f3bb27c5bd40e4a69ce'
 APP_CERTIFICATE = 'c01765fd220246b889b97e371d2b71ad'
+EXPIRATION_TIME_IN_SECONDS = 3600*24
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
